@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { buttons } from "./data";
+import { Outlet, Link } from "react-router-dom";
 import QRCode from "react-qr-code";
 
 export const Logo = styled.div`
   background-image: url("/white.png");
-  width: 160px;
-  height: 110px;
+  width: 300px;
+  height: 200px;
   background-size: cover;
 `;
 
@@ -46,35 +47,15 @@ const CongratsContainer = styled.div`
   color: white;
   align-items: center;
   width: 100vw;
-  height: 85vh;
+  height: 40vh;
   align-self: center;
   justify-content: center;
   flex-wrap: wrap;
   gap: 70px;
-  margin-top: 20px;
+margin-top: 150px;
 `;
 
-const ScoreCounter = styled.div`
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  left: 20px;
-  top: 20px;
-  color: white;
-  font-size: 25px;
-`;
 
-const TimerCounter = styled.div`
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  right: 20px;
-  top: 20px;
-  color: white;
-  font-size: 25px;
-`;
 
 const GameButton = styled.button`
   padding: 15px;
@@ -109,13 +90,15 @@ export const PlayAgain = styled.button`
   width: 100px;
   height: 70px;
   border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 10px;
   border: none;
 `;
 
-export default function Home() {
-  const [score, setScore] = useState(0);
-  const [step, setStep] = useState(1);
+export default function Start() {
+
   const [timer, setTimer] = useState(15);
   const [currentButton, setCurrentButton] = useState(0);
 
@@ -147,56 +130,31 @@ export default function Home() {
   }, [currentButton]);
 
   return (
-    <div style={{ overflow: "hidden", width: "100vw", height: "100vh" }}>
+    <div style={{ overflow: "hidden" }}>
       <Container>
         <LogoContainer>
           <Logo />
         </LogoContainer>
 
-        {timer > 0 ? (
-          <ButtonContainer>
-            {timer > 0 ? <ScoreCounter>Score: {score}</ScoreCounter> : null}
-            {timer > 0 ? <TimerCounter>:{timer}</TimerCounter> : null}
-            {buttons.map((but, i) => {
-              return (
-                <GameButton
-                  disabled={currentButton !== but.id}
-                  key={but.id}
-                  style={{
-                    background: `${
-                      currentButton === but.id ? but.color : "grey"
-                    }`,
-                    width: `${but.width}`,
-                    justifySelf: `${but.center}`,
-                  }}
-                  onClick={() => {
-                    setScore(score + 1);
-                  }}
-                />
-              );
-            })}
-          </ButtonContainer>
-        ) : (
-          <CongratsContainer>
-            <h1>Congratulations</h1>
-            <p style={{ fontSize: "25px" }}> You Got {score} points</p>
-            <p>*Scan the Qr code below to record your points</p>
+        <CongratsContainer>
+            <h1 style={{fontSize:'50px'}}>Are You Fast Enough?</h1>
 
-            <QRCode
-              size={1000}
-              style={{ height: "200px", width: "300px" }}
-              value={`https://dpworld.vercel.app/direct/${score}/3`}
-            />
+            <p>*Hit The Buttons As Soon As they Light Up</p>
 
+
+            <Link style={{textDecoration:'none'}} to="/game">
             <PlayAgain
               onClick={() => {
                 setTimer(15);
-                setScore(0);
+
               }}>
-              Play Again
+<p style={{fontSize:'20px'}}>START</p>
             </PlayAgain>
+            </Link>
           </CongratsContainer>
-        )}
+
+
+
       </Container>
     </div>
   );
